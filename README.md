@@ -1,4 +1,4 @@
 kpls
 ====
 
-Kernel Partial Least Squares
+Comparing Kernel Partial Least Squares to Kernel PCA.

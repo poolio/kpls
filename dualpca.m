@@ -45,8 +45,8 @@ K = K - J - J' + E * ones(ell, ell);
 invL = diag(1./diag(L));         % inverse of L
 sqrtL = diag(sqrt(diag(L)));     % sqrt of eigenvalues
 invsqrtL = diag(1./diag(sqrtL)); % inverse of sqrtL
-TestFeat = invsqrtL * V' * Ktest(1:end-1,:);
-TrainFeat = sqrtL * V'; % = invsqrtL * V' * K;
+%TestFeat = invsqrtL * V' * Ktest(1:end-1,:);
+%TrainFeat = sqrtL * V'; % = invsqrtL * V' * K;
 
 % Note that norm(TrainFeat, 'fro') = sum-squares of 
 %    norms of projections = sum(diag(L)).
@@ -54,15 +54,15 @@ TrainFeat = sqrtL * V'; % = invsqrtL * V' * K;
 %    (sum(diag(K)) - sum(diag(L)))/ell
 % If we need the new inner product information:
 Knew = V * L * V'; % = TrainFeat' * TrainFeat;
+if ~isempty(Ktest)
+  % between training and test
+  Ktestnew = V * V' * Ktest(1:end-1,:); 
 
-% between training and test
-Ktestnew = V * V' * Ktest(1:end-1,:); 
+  % and between test and test
+  Ktestvstest = Ktest(1:end-1,:)'*V*invL*V'*Ktest(1:end-1,:);
 
-% and between test and test
-Ktestvstest = Ktest(1:end-1,:)'*V*invL*V'*Ktest(1:end-1,:);
-
-% The average sum-squared residual of the test points is
-sum(Ktest(ell + 1,:) - diag(Ktestvstest)')/size(Ktest,2)
-
+  % The average sum-squared residual of the test points is
+  sum(Ktest(ell + 1,:) - diag(Ktestvstest)')/size(Ktest,2)
+end
 alpha=V;
 L = diag(L);

@@ -1,6 +1,6 @@
-function [alpha,testY,beta,varargout] = dualpls(K,Ktest,Y,T,varargin)
+function [beta,testY, alpha,varargout] = dualpls(K,Ktest,Y,T,varargin)
 
-%function [alpha,testY,varargout] = dualpls(K,Y,Ytest,T,varargin)
+%function [beta,testY,alpha,varargout] = dualpls(K,Y,Ytest,T,varargin)
 %
 % Performs dual (kernel) PLS discrimination
 %
@@ -54,10 +54,12 @@ end
 alpha = beta * ((tau'*K*beta)\tau')*Y;
 
 %  Ktest gives new data inner products as rows, Ytest true outputs
+if ~isempty(Ktest)
 elltest = size(Ktest',1);
 testY = Ktest' * alpha;
 if ~isempty(varargin)
     Ytest = varargin{1};
     testerror = norm(Ytest - testY,'fro')/sqrt(elltest)
     varargout = testerror;
+end
 end
